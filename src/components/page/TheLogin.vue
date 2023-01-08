@@ -3,7 +3,7 @@
     <form class="login">
       <p class="login-register">
         Don't have an account?
-        <router-link class="router-link" to="/register"></router-link>
+        <router-link class="router-link" to="/register">Register</router-link>
       </p>
       <h2>Login to FireBlogs</h2>
       <div class="inputs">
@@ -15,8 +15,12 @@
           <input type="password" placeholder="Password" v-model="password" />
           <BaseIcon class="icon" imgSrc="lock-alt-solid.svg" />
         </div>
+        <div class="error" v-show="error">{{ this.errorMsg }}</div>
       </div>
-      <button>Sign In</button>
+      <router-link class="forgot-password" to="/forgotPassword"
+        >Forgot your password?</router-link
+      >
+      <button @click.prevent="signIn">Sign In</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -24,15 +28,35 @@
 </template>
 <script>
 import BaseIcon from "../ui/BaseIcon.vue";
+import { auth } from "../../firebase/firebaseInit";
+
 export default {
   components: {
     BaseIcon,
   },
   data() {
     return {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
+      error: null,
+      errorMsg: "",
     };
+  },
+  methods: {
+    signIn() {
+      auth
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.$router.push({ name: "Home" });
+          this.error = false;
+          this.errorMsg = "";
+          console.log(auth.currentUser.uid);
+        })
+        .catch((err) => {
+          this.error = true;
+          this.errorMsg = err.message;
+        });
+    },
   },
 };
 </script>

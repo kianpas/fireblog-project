@@ -30,9 +30,9 @@
         <div class="col-2">
           <ul>
             <router-link class="link" to="/">Home</router-link>
-            <router-link class="link" to="#">Blogs</router-link>
+            <router-link class="link" to="/blogs">Blogs</router-link>
             <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" to="#">Login In / Register</router-link>
+            <router-link class="link" to="/login">Login In / Register</router-link>
           </ul>
         </div>
       </div>

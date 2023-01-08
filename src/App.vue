@@ -11,6 +11,8 @@
 <script>
 import TheHeader from "./components/layout/TheHeader.vue";
 import TheFooter from "./components/layout/TheFooter.vue";
+import { auth } from "../src/firebase/firebaseInit";
+
 export default {
   name: "App",
   components: {
@@ -23,7 +25,14 @@ export default {
     };
   },
   created() {
+    auth.onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser", user);
+      }
+    });
     this.checkRoute();
+    this.$store.dispatch("getPost");
   },
   methods: {
     checkRoute() {
@@ -129,7 +138,11 @@ button:hover,
   cursor: none !important;
   background-color: rgba(128, 128, 128, 0.5) !important;
 }
-
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
 @media (min-width: 500px) {
   .blog-card-wrap {
     padding: 100px 16px;

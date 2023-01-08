@@ -21,10 +21,10 @@
     />
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
-        <router-link class="link" to="#">Home</router-link>
-        <router-link class="link" to="#">Blog</router-link>
+        <router-link class="link" to="/">Home</router-link>
+        <router-link class="link" to="/blogs">Blog</router-link>
         <router-link class="link" to="#">Create Post</router-link>
-        <router-link class="link" to="#">Login/Register</router-link>
+        <router-link class="link" to="/login">Login/Register</router-link>
       </ul>
     </transition>
   </header>
@@ -63,7 +63,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

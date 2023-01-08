@@ -7,6 +7,7 @@ const TheHome = () => import("./components/page/TheHome");
 const TheBlogs = () => import("./components/page/TheBlogs");
 const TheLogin = () => import("./components/page/TheLogin");
 const TheRegister = () => import("./components/page/TheRegister");
+const TheForgotPassword = () => import("./components/page/TheForgotPassword");
 
 const router = new VueRouter({
   mode: "history",
@@ -29,6 +30,12 @@ const router = new VueRouter({
       name: "Register",
       component: TheRegister,
       meta: { title: "Register" },
+    },
+    {
+      path: "/forgotPassword",
+      name: "ForgotPassword",
+      component: TheForgotPassword,
+      meta: { title: "ForgotPassword" },
     },
   ],
 });
