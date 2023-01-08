@@ -29,6 +29,7 @@ export default {
       this.$store.commit("updateUser", user);
       if (user) {
         this.$store.dispatch("getCurrentUser", user);
+        console.log(this.$store.state.profile);
       }
     });
     this.checkRoute();

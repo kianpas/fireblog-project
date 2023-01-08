@@ -1,14 +1,16 @@
 <template>
   <div class="reset-password">
-    <BaseModal v-if="modalActive" v-on:close-modal="closeModal" />
+    <BaseModal
+      v-if="modalActive"
+      v-on:close-modal="closeModal"
+      :modalMessage="modalMessage"
+    />
     <BaseLoading v-if="loading" />
     <div class="form-wrap">
       <form class="reset">
         <p class="login-register">
           Back to
-          <router-link class="router-link" :to="{ name: 'Login' }"
-            >Login</router-link
-          >
+          <router-link class="router-link" to="/login">Login</router-link>
         </p>
         <h2>Reset Password</h2>
         <p>Forgot your passowrd? Enter your email to reset it</p>
@@ -30,6 +32,8 @@
 import BaseIcon from "../ui/BaseIcon.vue";
 import BaseModal from "../ui/BaseModal.vue";
 import BaseLoading from "../ui/BaseLoading.vue";
+import { auth } from "../../firebase/firebaseInit";
+
 export default {
   components: {
     BaseIcon,
@@ -45,6 +49,22 @@ export default {
     };
   },
   methods: {
+    resetPassword() {
+      this.loading = true;
+      auth
+        .sendPasswordResetEmail(this.email)
+        .then(() => {
+          this.modalMessage =
+            "If your account exists, you will receive a reset a email";
+          this.loading = false;
+          this.modalActive = true;
+        })
+        .catch((err) => {
+          this.modalMessage = err.message;
+          this.loading = false;
+          this.modalActive = true;
+        });
+    },
     closeModal() {
       this.modalActive = !this.modalActive;
       this.email = "";
