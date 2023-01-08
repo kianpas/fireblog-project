@@ -26,10 +26,11 @@ export default {
   },
   created() {
     auth.onAuthStateChanged((user) => {
+      //기본적으로 user를 state에 update
       this.$store.commit("updateUser", user);
+      //이미 user가 있을 경우 현재 user를 가져옴
       if (user) {
         this.$store.dispatch("getCurrentUser", user);
-        console.log(this.$store.state.profile);
       }
     });
     this.checkRoute();

@@ -4,13 +4,20 @@
       <div class="branding">
         <router-link class="header" to="/">Firebase Blog</router-link>
       </div>
-      <div class="nav-links" v-show="!mobile">
-        <ul>
+      <div class="nav-links">
+        <ul v-show="!mobile">
           <router-link class="link" to="/">Home</router-link>
           <router-link class="link" to="/blogs">Blog</router-link>
           <router-link class="link" to="#">Create Post</router-link>
           <router-link class="link" to="/login">Login/Register</router-link>
         </ul>
+        <div
+          v-if="user"
+          :class="{ 'mobile-user-menu': mobile }"
+          @click="toggleProfileMenu"
+          class="profile"
+          ref="profile"
+        ></div>
       </div>
     </nav>
     <BaseIcon

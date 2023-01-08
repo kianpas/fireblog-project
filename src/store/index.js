@@ -41,6 +41,7 @@ export default new Vuex.Store({
       state.editPost = payload;
     },
     updateUser(state, payload) {
+      console.log(payload);
       state.user = payload;
     },
     setProfileInfo(state, payload) {
@@ -54,12 +55,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async getCurrentUser({ commit }) {
+    async getCurrentUser({ commit, state }) {
       const dataBase = await firestore
         .collection("users")
         .doc(auth.currentUser.uid);
+      console.log(state);
       const dbResult = await dataBase.get();
-      console.log("dbResult", dbResult);
       commit("setProfileInfo", dbResult);
       commit("setProfileInitials");
     },
