@@ -27,6 +27,13 @@ export default new Vuex.Store({
         blogDate: "May 1, 2021",
       },
     ],
+    blogPosts: [],
+    postLoaded: null,
+    blogHTML: "Write your blog title here...",
+    blogTitle: "",
+    blogPhotoName: "",
+    blogPhotoFileURL: null,
+    blogPhotoPreview: null,
     editPost: null,
     user: null,
     profileId: null,
@@ -53,6 +60,30 @@ export default new Vuex.Store({
     setProfileInitials(state) {
       state.profileInitials = state.profileName.match(/(\b\S)?/g).join("");
     },
+    changeName(state, payload) {
+      state.profileName = payload;
+    },
+    changeUserName(state, payload) {
+      state.profileUsername = payload;
+    },
+    // changeEmail(state, payload) {
+    //   state.profileEmail = payload;
+    // },
+    updateBlogTitle(state, payload) {
+      state.blogTitle = payload;
+    },
+    newBlogPost(state, payload) {
+      state.blogHTML = payload;
+    },
+    fileNameChange(state, payload) {
+      state.blogPhotoName = payload;
+    },
+    createFileUrl(state, payload) {
+      state.blogPhotoFileURL = payload;
+    },
+    openPhotoPreview(state, payload) {
+      state.blogPhotoPreview = payload;
+    },
   },
   actions: {
     async getCurrentUser({ commit, state }) {
@@ -64,6 +95,15 @@ export default new Vuex.Store({
       commit("setProfileInfo", dbResult);
       commit("setProfileInitials");
     },
+    async updateUserSettings({ commit, state }) {
+      const dataBase = await firestore.collection("users").doc(state.profileId);
+      await dataBase.update({
+        name: state.profileName,
+        username: state.profileUsername,
+      });
+      commit("setProfileInitials");
+    },
   },
+
   modules: {},
 });

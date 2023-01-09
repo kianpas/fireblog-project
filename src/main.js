@@ -2,12 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store/index";
+import Vue2Editor from "vue2-editor";
 import { auth } from "./firebase/firebaseInit";
+
+Vue.use(Vue2Editor);
 
 Vue.config.productionTip = false;
 
 let app;
-
 auth.onAuthStateChanged(() => {
   if (!app) {
     new Vue({

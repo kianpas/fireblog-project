@@ -25,6 +25,11 @@ export default {
   width: auto;
 }
 
+.menu-icon img {
+  height: 25px;
+  width: auto;
+}
+
 .svg-icon {
   width: 24px;
   height: auto;
@@ -68,5 +73,21 @@ export default {
   width: 12px;
   position: absolute;
   left: 6px;
+}
+.profile-icon {
+  width: 14px;
+  height: auto;
+  margin-right: 8px;
+}
+
+.close-icon {
+  width: 24px;
+  height: auto;
+  cursor: pointer;
+  font-size: 24px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #303030;
 }
 </style>

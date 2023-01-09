@@ -8,6 +8,8 @@ const TheBlogs = () => import("./components/page/TheBlogs");
 const TheLogin = () => import("./components/page/TheLogin");
 const TheRegister = () => import("./components/page/TheRegister");
 const TheForgotPassword = () => import("./components/page/TheForgotPassword");
+const TheCreatePost = () => import("./components/page/TheCreatePost");
+const TheProfile = () => import("./components/page/TheProfile");
 
 const router = new VueRouter({
   mode: "history",
@@ -36,6 +38,18 @@ const router = new VueRouter({
       name: "ForgotPassword",
       component: TheForgotPassword,
       meta: { title: "ForgotPassword" },
+    },
+    {
+      path: "/createPost",
+      name: "CreatePost",
+      component: TheCreatePost,
+      meta: { title: "CreatePost" },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: TheProfile,
+      meta: { title: "Profile" },
     },
   ],
 });
