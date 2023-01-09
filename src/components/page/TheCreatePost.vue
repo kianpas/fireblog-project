@@ -1,36 +1,15 @@
 <template>
   <div class="create-post">
-    <BlogCoverPreview v-show="this.$store.state.blogPhotoPreview" />
-    <BaseLoading v-show="loading" />
     <div class="container">
-      <div :class="{ invisible: !error }" class="err-message">
-        <p><span>Error:</span>{{ this.errorMsg }}</p>
-      </div>
       <div class="blog-info">
         <input type="text" placeholder="Enter Blog Title" v-model="blogTitle" />
-        <div class="upload-file">
-          <label for="blog-photo">Upload Cover Photo</label>
-          <input
-            type="file"
-            ref="blogPhoto"
-            id="blog-photo"
-            @change="fileChange"
-            accept=".png, .jpg, ,jpeg"
-          />
-          <button @click="openPreview" class="preview">Preview Photo</button>
-          <span>File Chosen: {{ blogCoverPhotoName }}</span>
-        </div>
       </div>
       <div class="editor">
-        <vue-editor
-          :editorOptions="editorSettings"
-          v-model="blogHTML"
-          useCustomImageHandler
-        />
+        <vue-editor v-model="blogHTML" />
       </div>
       <div class="blog-actions">
         <button @click="uploadBlog">Publish Blog</button>
-        <router-link class="router-button" :to="{ name: 'BlogPreview' }"
+        <router-link class="router-button" to="/preview"
           >Post Preview</router-link
         >
       </div>
@@ -39,36 +18,9 @@
 </template>
 
 <script>
-import Quill from "quill";
-import BaseLoading from "../ui/BaseLoading.vue";
-import BlogCoverPreview from "../blogs/BlogPreview.vue";
-window.Quill = Quill;
-const ImageResize = require("quill-image-resize-module").default;
-Quill.register("modules/imageResize", ImageResize);
 export default {
-  components: { BaseLoading, BlogCoverPreview },
-  data() {
-    return {
-      file: null,
-      error: null,
-      errorMsg: null,
-      loading: false,
-      editorSettings: {
-        module: {
-          ImageResize: {},
-        },
-      },
-    };
-  },
   methods: {
-    fileChange() {
-      this.file = this.$refs.blogPhoto.files[0];
-      const fileName = this.file.name;
-      this.$store.commit("fileNameChange", fileName);
-      this.$store.commit("createFileUrl", URL.createObjectURL(this.file));
-    },
-    openPreview() {
-      console.log(this.$store.state.blogPhotoName);
+    uploadBlog() {
       return;
     },
   },
@@ -79,7 +31,7 @@ export default {
     blogCoverPhotoName() {
       return this.$store.state.blogPhotoName;
     },
-    blogTitles: {
+    blogTitle: {
       get() {
         return this.$store.state.blogTitle;
       },
@@ -104,19 +56,18 @@ export default {
   position: relative;
   height: 100%;
 }
-
 .create-post button {
   margin-top: 0;
 }
 
-.router-button {
+.create-post .router-button {
   text-decoration: none;
   color: #fff;
 }
 
-label,
-button,
-.router-button {
+.create-post label,
+.create-post button,
+.create-post .router-button {
   transition: 0.5s ease-in-out all;
   align-self: center;
   font-size: 14px;
@@ -128,9 +79,9 @@ button,
   text-decoration: none;
 }
 
-label:hover,
-button:hover,
-.router-button:hover {
+.create-post label:hover,
+.create-post button:hover,
+.create-post .router-button:hover {
   background-color: rgba(48, 48, 48, 0.7);
 }
 
@@ -138,28 +89,6 @@ button:hover,
   position: relative;
   height: 100%;
   padding: 10px 25px 60px;
-}
-
-.invisible {
-  opacity: 0 !important;
-}
-
-.err-message {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  color: #fff;
-  margin-bottom: 10px;
-  background-color: #303030;
-  opacity: 1;
-  transition: 0.5s ease all;
-}
-
-.err-message p {
-  font-size: 14px;
-}
-.err-message span {
-  font-weight: 600;
 }
 
 .blog-info {
@@ -183,40 +112,26 @@ button:hover,
   box-shadow: 0 1px 0 0 #303030;
 }
 
-.upload-file {
-  flex: 1;
-  margin-left: 16px;
-  position: relative;
-  display: flex;
-}
-
-.upload-file input {
-  display: none;
-}
-
-.upload-file .preview {
-  margin-left: 16px;
-  text-transform: initial;
-}
-
-.upload-file span {
-  font-size: 12px;
-  margin-left: 16px;
-  align-self: center;
-}
-
 .editor {
   height: 60vh;
   display: flex;
   flex-direction: column;
 }
 
+.blog-actions {
+  margin-top: 32px;
+}
+
+.blog-actions button {
+  margin-right: 16px;
+}
 .quillWrapper {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
 .ql-container {
   display: flex;
   flex-direction: column;
@@ -226,13 +141,5 @@ button:hover,
 
 .ql-editor {
   padding: 20px 16px 30px;
-}
-
-.blog-actions {
-  margin-top: 32px;
-}
-
-.blog-actions button {
-  margin-top: 32px;
 }
 </style>

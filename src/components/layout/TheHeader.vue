@@ -19,6 +19,7 @@
           @click="toggleProfileMenu"
           class="profile"
           ref="profile"
+          v-show="!mobile"
         >
           <span>{{ this.$store.state.profileInitials }}</span>
           <div v-show="profileMenu" class="profile-menu">
@@ -114,7 +115,7 @@ export default {
     },
     signOut() {
       auth.signOut();
-      window.location.reload();
+      window.location.href("/")
     },
   },
   computed: {

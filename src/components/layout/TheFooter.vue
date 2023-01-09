@@ -31,8 +31,10 @@
           <ul>
             <router-link class="link" to="/">Home</router-link>
             <router-link class="link" to="/blogs">Blogs</router-link>
-            <router-link class="link" to="#">Create Post</router-link>
-            <router-link class="link" to="/login">Login In / Register</router-link>
+            <router-link class="link" to="/createPost">Create Post</router-link>
+            <router-link class="link" to="/login" v-show="!user"
+              >Login In / Register</router-link
+            >
           </ul>
         </div>
       </div>
@@ -48,6 +50,11 @@ import BaseIcon from "../ui/BaseIcon.vue";
 export default {
   components: {
     BaseIcon,
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
   },
 };
 </script>
