@@ -40,7 +40,7 @@
                   <p>Profile</p>
                 </router-link>
               </div>
-              <div v-if="admin" class="option">
+              <div class="option">
                 <router-link class="option" to="/admin">
                   <BaseIcon class="icon" imgSrc="user-crown-light.svg" />
                   <p>Admin</p>
@@ -115,7 +115,7 @@ export default {
     },
     signOut() {
       auth.signOut();
-      window.location.href("/")
+      window.location.href("/");
     },
   },
   computed: {

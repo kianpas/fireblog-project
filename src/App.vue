@@ -34,7 +34,7 @@ export default {
       }
     });
     this.checkRoute();
-    this.$store.dispatch("getPost");
+    // this.$store.dispatch("getPost");
   },
   methods: {
     checkRoute() {
@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
 
 * {
@@ -81,17 +81,6 @@ export default {
   text-transform: uppercase;
   color: black;
 }
-.blog-card-wrap {
-  position: relative;
-  padding: 80px 16px;
-  background-color: #f1f1f1;
-}
-
-.blog-cards {
-  display: grid;
-  gap: 32px;
-  grid-template-columns: 1fr;
-}
 
 button,
 .router-button {
@@ -104,16 +93,14 @@ button,
   border-radius: 20px;
   border: none;
   text-transform: uppercase;
-}
 
-button:focus,
-.router-button:focus {
-  outline: none;
-}
+  &:focus {
+    outline: none;
+  }
 
-button:hover,
-.router-button:hover {
-  background-color: rgba(48, 48, 48, 0.7);
+  &:hover {
+    background-color: rgba(48, 48, 48, 0.7);
+  }
 }
 
 .button-ghost {
@@ -124,10 +111,15 @@ button:hover,
   font-size: 15px;
   font-weight: 500;
   background-color: transparent;
-}
 
-.button-ghost i {
-  margin-left: 8px;
+  @media (min-width: 700px) {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  i {
+    margin-left: 8px;
+  }
 }
 
 .button-light {
@@ -145,30 +137,30 @@ button:hover,
   font-size: 12px;
   color: red;
 }
-@media (min-width: 500px) {
-  .blog-card-wrap {
+
+.blog-card-wrap {
+  position: relative;
+  padding: 80px 16px;
+  background-color: #f1f1f1;
+
+  @media (min-width: 500px) {
     padding: 100px 16px;
   }
 
   .blog-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr;
 
-@media (min-width: 700px) {
-  .button-ghost {
-    margin-top: 0;
-    margin-left: auto;
-  }
-}
-@media (min-width: 900px) {
-  .blog-cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 1200px) {
-  .blog-cards {
-    grid-template-columns: repeat(4, 1fr);
+    @media (min-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 900px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 }
 </style>
