@@ -1,5 +1,6 @@
 <template>
   <div class="create-post">
+    <BlogPhotoPreview v-show="this.$store.state.blogPhotoPreview" />
     <div class="container">
       <div class="blog-info">
         <input type="text" placeholder="Enter Blog Title" v-model="blogTitle" />
@@ -23,7 +24,12 @@
         </div>
       </div>
       <div class="editor">
-        <vue-editor v-model="blogHTML" />
+        <vue-editor
+          v-model="blogHTML"
+          :editorOptions="editorSettings"
+          useCustomImageHandler
+          @image-added="imageHandler"
+        />
       </div>
       <div class="blog-actions">
         <button @click="uploadBlog">Publish Blog</button>
@@ -40,8 +46,13 @@ import Quill from "quill";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
-import { firestore } from "../../firebase/firebaseInit";
+import { firestore, firestorage } from "../../firebase/firebaseInit";
+import BlogPhotoPreview from "../blogs/BlogPhotoPreview.vue";
+
 export default {
+  components: {
+    BlogPhotoPreview,
+  },
   data() {
     return {
       file: null,
@@ -59,6 +70,31 @@ export default {
       this.file = this.$refs.blogPhoto.files[0];
       const fileName = this.file.name;
       this.$store.commit("fileNameChange", fileName);
+      this.$store.commit("createFileURL", URL.createObjectURL(this.file));
+    },
+    openPreview() {
+      this.$store.commit("openPhotoPreview");
+    },
+    imageHandler(file) {
+      // Editor, cursorLocation , resetUploader
+      const storageRef = firestorage.ref();
+      console.log(storageRef);
+      const docRef = storageRef.child(`documents/blogPostPhotos/${file.name}`);
+      console.log(docRef);
+      docRef.put(file).on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (err) => {
+          console.log(err);
+        },
+        // async () => {
+        //   const downloadURL = await docRef.getDownloadURL();
+        //   Editor.insertEmbed(cursorLocation, "image", downloadURL);
+        //   resetUploader();
+        // }
+      );
     },
     uploadBlog() {
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
@@ -82,12 +118,6 @@ export default {
         // return;
         return;
       }
-    },
-    async uploadBlogTest() {
-      console.log("!!!!~~!!");
-    },
-    openPreview() {
-      return;
     },
   },
   computed: {

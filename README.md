@@ -1,4 +1,8 @@
 # fireblog-project
+하단의 영상 참조하여 Vue 기반 파이어베이스 사용한 블로그
+
+See [영상참조](https://cli.vuejs.org/config/).
+## Project Overview
 
 ## Project setup
 ```
