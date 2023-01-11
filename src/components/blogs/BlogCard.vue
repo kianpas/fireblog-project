@@ -18,7 +18,11 @@
         Posted on :
         {{ new Date(posts.blogDate).toLocaleString({ dateStyle: "long" }) }}
       </h6>
-      <router-link class="link" to="#">View The Post</router-link>
+      <router-link
+        class="link"
+        :to="{ name: 'BlogView', params: { blogId: posts.blogId } }"
+        >View The Post</router-link
+      >
     </div>
   </div>
 </template>
@@ -34,8 +38,12 @@ export default {
     };
   },
   computed: {
+    //토글용
     editPost() {
       return this.$store.state.editPost;
+    },
+    deletePost() {
+      return this.$store.dispatch("deletePost", this.post.blogId);
     },
   },
 };

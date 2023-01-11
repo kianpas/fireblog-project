@@ -12,6 +12,7 @@ const TheForgotPassword = () => import("./components/page/TheForgotPassword");
 const TheCreatePost = () => import("./components/page/TheCreatePost");
 const TheProfile = () => import("./components/page/TheProfile");
 const ThePreview = () => import("./components/page/ThePreview");
+const TheBlogView = () => import("./components/page/TheBlogView");
 
 const router = new VueRouter({
   mode: "history",
@@ -58,6 +59,12 @@ const router = new VueRouter({
       name: "Preview",
       component: ThePreview,
       meta: { title: "Preview" },
+    },
+    {
+      path: "/blogView/:blogId",
+      name: "BlogView",
+      component: TheBlogView,
+      meta: { title: "BlogView" },
     },
   ],
 });

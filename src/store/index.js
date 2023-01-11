@@ -7,24 +7,32 @@ export default new Vuex.Store({
   state: {
     sampleBlogCards: [
       {
+        blogId: "stc1",
         blogTitle: "Blog Card #1",
         blogCoverPhoto: "stock-1",
         blogDate: "May 1, 2021",
+        blogHTML: "This is stc1",
       },
       {
+        blogId: "stc2",
         blogTitle: "Blog Card #2",
         blogCoverPhoto: "stock-2",
         blogDate: "May 1, 2021",
+        blogHTML: "This is stc2",
       },
       {
+        blogId: "stc3",
         blogTitle: "Blog Card #3",
         blogCoverPhoto: "stock-3",
         blogDate: "May 1, 2021",
+        blogHTML: "This is stc3",
       },
       {
+        blogId: "stc4",
         blogTitle: "Blog Card #4",
         blogCoverPhoto: "stock-4",
         blogDate: "May 1, 2021",
+        blogHTML: "This is stc4",
       },
     ],
     blogPosts: [],
@@ -42,6 +50,14 @@ export default new Vuex.Store({
     profileName: null,
     profileUsername: null,
     profileInitials: null,
+  },
+  getters: {
+    blogPostsFeed(state) {
+      return state.blogPosts.slice(0, 2);
+    },
+    blogPostsCards(state) {
+      return state.blogPosts.slice(2, 6);
+    },
   },
   mutations: {
     toggleEditPost(state, payload) {
@@ -83,6 +99,11 @@ export default new Vuex.Store({
     openPhotoPreview(state) {
       state.blogPhotoPreview = !state.blogPhotoPreview;
     },
+    filterBlogPost(state, payload) {
+      state.blogPosts = state.blogPosts.filter(
+        (post) => post.blogID !== payload
+      );
+    },
   },
   actions: {
     async getCurrentUser({ commit }) {
@@ -101,6 +122,37 @@ export default new Vuex.Store({
         username: state.profileUsername,
       });
       commit("setProfileInitials");
+    },
+    async getPost({ state }) {
+      const dataBase = await firestore
+        .collection("")
+        .orderBy("date", "desc")
+        .doc();
+      const dbResult = await dataBase.get();
+      //중복체크
+      dbResult.forEach((doc) => {
+        if (!state.blogPosts.some((post) => post.blogId === doc.id)) {
+          const data = {
+            blogId: doc.data().blogId,
+            blogHTML: doc.data().blogHTML,
+            blogCoverPhoto: doc.data().blogCoverPhoto,
+            blogTitle: doc.data().blogTitle,
+            blogDate: doc.data().date,
+            blogCoverPhotoName: doc.data().blogCoverPhotoName,
+          };
+          state.blogPosts.push(data);
+        }
+      });
+      state.postLoaded = true;
+    },
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterBlogPost", payload);
+      await dispatch("getPost");
+    },
+    async deletePost({ commit }, payload) {
+      const getPost = await firestore.collection("blogPost").doc(payload);
+      await getPost.delete();
+      commit("filteredBlogPost", payload);
     },
   },
 

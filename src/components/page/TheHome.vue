@@ -11,7 +11,7 @@
         <h3>View More Recent Blogs</h3>
         <div class="blog-cards">
           <BlogCard
-            v-for="(post, index) in sampleBlogCards"
+            v-for="(post, index) in blogCards"
             :post="post"
             :key="index"
           />
@@ -61,11 +61,14 @@ export default {
           blogCoverPhoto: "designed-for-everyone",
         },
       ],
+      dev: true,
     };
   },
   computed: {
-    sampleBlogCards() {
-      return this.$store.state.sampleBlogCards;
+    blogCards() {
+      return this.dev
+        ? this.$store.state.sampleBlogCards
+        : this.$store.getters.blogPostsCards;
     },
     user() {
       return this.$store.state.user;

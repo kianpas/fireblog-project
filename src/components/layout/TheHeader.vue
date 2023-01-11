@@ -65,7 +65,7 @@
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" to="/">Home</router-link>
         <router-link class="link" to="/blogs">Blog</router-link>
-        <router-link class="link" to="#">Create Post</router-link>
+        <router-link class="link" to="/createPost">Create Post</router-link>
         <router-link class="link" to="/login" v-show="!user"
           >Login/Register</router-link
         >

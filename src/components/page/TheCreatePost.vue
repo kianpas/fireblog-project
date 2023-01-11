@@ -1,6 +1,7 @@
 <template>
   <div class="create-post">
     <BlogPhotoPreview v-show="this.$store.state.blogPhotoPreview" />
+    <BaseLoading v-show="loading" />
     <div class="container">
       <div class="blog-info">
         <input type="text" placeholder="Enter Blog Title" v-model="blogTitle" />
@@ -24,12 +25,7 @@
         </div>
       </div>
       <div class="editor">
-        <vue-editor
-          v-model="blogHTML"
-          :editorOptions="editorSettings"
-          useCustomImageHandler
-          @image-added="imageHandler"
-        />
+        <vue-editor v-model="blogHTML" :editorOptions="editorSettings" />
       </div>
       <div class="blog-actions">
         <button @click="uploadBlog">Publish Blog</button>
@@ -48,16 +44,18 @@ const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
 import { firestore, firestorage } from "../../firebase/firebaseInit";
 import BlogPhotoPreview from "../blogs/BlogPhotoPreview.vue";
-
+import BaseLoading from "../../components/ui/BaseLoading.vue";
 export default {
   components: {
     BlogPhotoPreview,
+    BaseLoading,
   },
   data() {
     return {
       file: null,
       error: null,
       errorMsg: "",
+      loading: null,
       editorSettings: {
         modules: {
           imageResize: {},
@@ -75,48 +73,62 @@ export default {
     openPreview() {
       this.$store.commit("openPhotoPreview");
     },
-    imageHandler(file) {
-      // Editor, cursorLocation , resetUploader
-      const storageRef = firestorage.ref();
-      console.log(storageRef);
-      const docRef = storageRef.child(`documents/blogPostPhotos/${file.name}`);
-      console.log(docRef);
-      docRef.put(file).on(
-        "state_changed",
-        (snapshot) => {
-          console.log(snapshot);
-        },
-        (err) => {
-          console.log(err);
-        },
-        // async () => {
-        //   const downloadURL = await docRef.getDownloadURL();
-        //   Editor.insertEmbed(cursorLocation, "image", downloadURL);
-        //   resetUploader();
-        // }
-      );
-    },
+    // imageHandler(file, Editor, cursorLocation, resetUploader) {
+    //   // Editor, cursorLocation , resetUploader
+    //   const storageRef = firestorage.ref();
+    //   const docRef = storageRef.child(`documents/blogPostPhotos/${file.name}`);
+    //   console.log(docRef);
+    //   docRef.put(file).on(
+    //     "state_changed",
+    //     (snapshot) => {
+    //       console.log(snapshot);
+    //     },
+    //     (err) => {
+    //       console.log(err);
+    //     },
+    //     async () => {
+    //       const downloadURL = await docRef.getDownloadURL();
+    //       Editor.insertEmbed(cursorLocation, "image", downloadURL);
+    //       resetUploader();
+    //     }
+    //   );
+    // },
     uploadBlog() {
       if (this.blogTitle.length !== 0 && this.blogHTML.length !== 0) {
-        async () => {
-          // const timestamp = await Date.now();
-          const dataBase = await firestore.collection("blogPosts").doc();
-          await dataBase.set({
-            blogId: dataBase.id,
-            blogHTML: this.blogHTML,
-            blogTitle: this.blogTitle,
-            profileId: this.profileId,
-            // date: timestamp,
-          });
-        };
+        if (this.file) {
+          this.loading = true;
+          const storageRef = firestorage.ref();
+          const docRef = storageRef.child(
+            `documents/blogPostPhotos/${this.$store.state.blogPhotoName}`
+          );
 
-        // this.error = true;
-        // this.errorMsg = "Please enter";
-        // setTimeout(() => {
-        //   this.error = false;
-        // }, 5000);
-        // return;
-        return;
+          docRef.put(this.file).on(
+            "state_changed",
+            (snapshot) => {
+              console.log(snapshot);
+            },
+            (err) => {
+              console.log(err);
+              this.loading = false;
+            },
+            async () => {
+              this.loading = true;
+              const timestamp = await Date.now();
+              const dataBase = await firestore.collection("blogPosts").doc();
+
+              await dataBase.set({
+                blogId: dataBase.id,
+                blogHTML: this.blogHTML,
+                blogCoverPhotoName: this.blogCoverPhotoName,
+                blogTitle: this.blogTitle,
+                profileId: this.profileId,
+                date: timestamp,
+              });
+              await this.$store.dispatch("getPost");
+              this.loading = false;
+            }
+          );
+        }
       }
     },
   },
@@ -148,7 +160,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .create-post {
   position: relative;
   height: 100%;
