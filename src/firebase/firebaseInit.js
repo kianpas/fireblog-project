@@ -3,12 +3,12 @@ import "firebase/firestore";
 import "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBUKTNbd5VUJhXm0q1-8_c1ybw3vJmWIHg",
-  authDomain: "fir-blog-c92b4.firebaseapp.com",
-  projectId: "fir-blog-c92b4",
-  storageBucket: "fir-blog-c92b4.appspot.com",
-  messagingSenderId: "1058076150859",
-  appId: "1:1058076150859:web:005e8ba3a856b41eb1d1ce",
+  apiKey: process.env.VUE_APP_APIKEY,
+  authDomain: process.env.VUE_APP_AUTHDOMAIN,
+  projectId: process.env.VUE_APP_PROJECTID,
+  storageBucket: process.env.VUE_APP_STOREAGEBUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
+  appId: process.env.VUE_APP_APPID,
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);

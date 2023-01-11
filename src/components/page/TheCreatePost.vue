@@ -36,6 +36,10 @@
 </template>
 
 <script>
+import Quill from "quill";
+window.Quill = Quill;
+const ImageResize = require("quill-image-resize-module").default;
+Quill.register("modules/imageResize", ImageResize);
 import { firestore } from "../../firebase/firebaseInit";
 export default {
   data() {
@@ -43,6 +47,11 @@ export default {
       file: null,
       error: null,
       errorMsg: "",
+      editorSettings: {
+        modules: {
+          imageResize: {},
+        },
+      },
     };
   },
   methods: {
